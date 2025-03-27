@@ -1,0 +1,31 @@
+FROM python:3.9-slim as builder
+WORKDIR /app
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN python -m venv --copies /app/venv
+ENV PATH="/app/venv/bin:$PATH"
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+FROM python:3.9-slim
+WORKDIR /app
+
+RUN addgroup --system python && \
+    adduser --system --disabled-password --ingroup python python && \
+    chown python:python /app
+
+USER python
+
+COPY --chown=python:python --from=builder /app/venv ./venv
+COPY --chown=python:python --from=builder /app/main.py .
+
+
+ENV PATH="/app/venv/bin:$PATH"
+CMD ["python", "main.py"]
