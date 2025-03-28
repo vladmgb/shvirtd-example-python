@@ -28,4 +28,4 @@ COPY --chown=python:python --from=builder /app/main.py .
 
 
 ENV PATH="/app/venv/bin:$PATH"
-CMD ["python", "main.py"]
+CMD ["python", "not_tested_main.py"]
