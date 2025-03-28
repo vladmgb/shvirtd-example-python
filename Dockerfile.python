@@ -24,7 +24,7 @@ RUN addgroup --system python && \
 USER python
 
 COPY --chown=python:python --from=builder /app/venv ./venv
-COPY --chown=python:python --from=builder /app/main.py .
+COPY --chown=python:python --from=builder /app/not_tested_main.py .
 
 
 ENV PATH="/app/venv/bin:$PATH"
